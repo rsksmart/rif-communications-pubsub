@@ -1,0 +1,67 @@
+{
+  "name": "rif-communications-pubsub",
+  "version": "0.1.0",
+  "description": "PubSub module",
+  "keywords": [
+    "RIF",
+    "Communications",
+    "PubSub"
+  ],
+  "homepage": "https://github.com/rsksmart/rif-communications-pubsub#readme",
+  "bugs": {
+    "url": "https://github.com/rsksmart/rif-communications-pubsub/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Vojtech Simetka",
+    "email": "vojtech@simetka.cz"
+  },
+  "files": [
+    "src",
+    "dist",
+    "lib",
+    "types"
+  ],
+  "main": "src/index.ts",
+  "repository": "https://github.com/rsksmart/rif-communications-pubsub",
+  "scripts": {
+    "compile": "tasegir compile",
+    "compile:watch": "tasegir compile -- --watch",
+    "types-check": "tasegir types-check",
+    "exec": "tasegir run",
+    "lint": "tasegir lint",
+    "release": "tasegir release",
+    "build": "tasegir build",
+    "test": "npm run test:integration",
+    "test:integration": "tasegir test --target node --files ./test/integration/*.spec.ts",
+    "tasegir:link": "ln -s ./node_modules/tasegir/src/config/tsconfig.json ./tsconfig.json && ln -s ./node_modules/tasegir/src/config/eslintrc.js ./.eslintrc.js"
+  },
+  "dependencies": {
+    "hyper": "0.0.9",
+    "hyperdiff": "^2.0.5",
+    "libp2p": "^0.28.9",
+    "libp2p-gossipsub": "^0.4.6",
+    "libp2p-kad-dht": "^0.19.9",
+    "libp2p-mdns": "^0.14.2",
+    "libp2p-mplex": "^0.9.5",
+    "libp2p-secio": "^0.12.6",
+    "libp2p-tcp": "^0.14.6",
+    "libp2p-websockets": "^0.13.6",
+    "peer-id": "^0.13.13"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^8.0.0",
+    "@types/sinon": "^9.0.3",
+    "@types/sinon-chai": "^3.2.4",
+    "chai": "^4.2.0",
+    "sinon": "^9.0.2",
+    "sinon-chai": "^3.5.0",
+    "tasegir": "^1.7.1"
+  },
+  "engines": {
+    "node": ">=10.0.0",
+    "npm": ">=6.0.0"
+  },
+  "types": "types/index.d.ts"
+}
