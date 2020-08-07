@@ -26,6 +26,8 @@ const config = {
   // TODO: Add bootnodes
 }
 
+export { Room }
+
 export default async function createRoom (roomName: string): Promise<Room> {
   const libp2p = await Libp2p.create(config)
   await libp2p.start()

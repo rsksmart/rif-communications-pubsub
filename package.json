@@ -37,6 +37,7 @@
     "tasegir:link": "ln -s ./node_modules/tasegir/src/config/tsconfig.json ./tsconfig.json && ln -s ./node_modules/tasegir/src/config/eslintrc.js ./.eslintrc.js"
   },
   "dependencies": {
+    "emittery": "^0.7.1",
     "hyperdiff": "^2.0.5",
     "libp2p": "^0.28.9",
     "libp2p-gossipsub": "^0.4.6",

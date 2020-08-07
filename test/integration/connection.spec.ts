@@ -1,8 +1,7 @@
 import sinon from 'sinon'
 import chai from 'chai'
 
-import createRoom from '../../src'
-import Room from '../../src/room/pubsub'
+import createRoom, { Room } from '../../src'
 
 function sleep<T> (ms: number, ...args: T[]): Promise<T> {
   return new Promise(resolve => setTimeout(() => resolve(...args), ms))

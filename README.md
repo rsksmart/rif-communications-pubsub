@@ -60,8 +60,8 @@ room.on('message', ({from, data}: {from: string, data: Buffer}) => {
 ## API
 ```ts
 const room = createRoom(topic) // Creates room with specific topic
-async room.leave() // Leave the room, stop libp2p
-room.broadcast(message: string | buffer) // Send message to the room
+room.leave() // Leave the room, stop libp2p
+async room.broadcast(message: string | buffer) // Send message to the room
 
 room.peerId
 room.peers
@@ -70,6 +70,7 @@ room.hasPeer(cid: string)
 room.on('peer joined', (cid: string) => {})
 room.on('peer left', (cid: string) => {})
 room.on('subscribed', () => {})
+room.on('unsubscribed', () => {})
 room.on('message', (message: {from: string, data: Buffer}) => {})
 ```
 

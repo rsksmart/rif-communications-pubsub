@@ -30,8 +30,8 @@ declare module 'libp2p' {
 
     dialProtocol(peerInfo: any, PROTOCOL: string): Promise<{stream: any}>
     pubsub: {
-      subscribe(topic: string, onMessage: (message: Buffer) => void): Promise<void>
-      unsubscribe(topic: string, onMessage: (message: Buffer) => void): Promise<void>
+      subscribe(topic: string, onMessage: (message: Buffer) => void): void
+      unsubscribe(topic: string, onMessage: (message: Buffer) => void): void
       publish(topic: string, message: Buffer): Promise<void>
       getSubscribers(topic: string): Promise<[]>
     }

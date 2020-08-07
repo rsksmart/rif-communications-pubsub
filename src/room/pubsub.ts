@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events'
+import Emittery from 'emittery'
 import diff from 'hyperdiff'
 import Libp2p from 'libp2p'
 
@@ -12,7 +12,7 @@ export const DEFAULT_OPTIONS = {
   pollInterval: 1000
 }
 
-export default class PubSubRoom extends EventEmitter {
+export default class PubSubRoom extends Emittery {
   protected libp2p: Libp2p
   protected topic: string
   protected connectedPeers: string[]
@@ -38,6 +38,7 @@ export default class PubSubRoom extends EventEmitter {
     )
 
     this.libp2p.pubsub.subscribe(this.topic, this.onMessage)
+    this.emit('subscribed')
   }
 
   /**
@@ -46,7 +47,7 @@ export default class PubSubRoom extends EventEmitter {
    * @emits peer joined  When new peer joins the topic
    * @emist peer left    When peer leaves the topic
    */
-  private async pollPeers () {
+  private async pollPeers (): Promise<void> {
     const newPeers = (await this.libp2p.pubsub.getSubscribers(this.topic)).sort()
 
     const differences = diff(this.connectedPeers, newPeers)
@@ -63,7 +64,7 @@ export default class PubSubRoom extends EventEmitter {
     return this.libp2p.peerId.toB58String()
   }
 
-  public get peers () {
+  public get peers (): string[] {
     return this.connectedPeers.slice(0)
   }
 
@@ -71,21 +72,22 @@ export default class PubSubRoom extends EventEmitter {
     return Boolean(this.connectedPeers.find(p => p.toString() === peer.toString()))
   }
 
-  public async leave () {
+  public leave (): void {
     clearInterval(this.interval)
-    await this.libp2p.pubsub.unsubscribe(this.topic, this.onMessage)
+    this.libp2p.pubsub.unsubscribe(this.topic, this.onMessage)
+    this.emit('unsubscribed')
   }
 
   /**
    * Broacast message to the topic
    */
-  public async broadcast (message: string | Buffer) {
+  public async broadcast (message: string | Buffer): Promise<void> {
     const msg = toBuffer(message)
 
     await this.libp2p.pubsub.publish(this.topic, msg)
   }
 
-  onMessage (message: Buffer) {
+  onMessage (message: Buffer): void {
     this.emit('message', message)
   }
 }
