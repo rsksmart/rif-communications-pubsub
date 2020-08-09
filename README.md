@@ -35,9 +35,11 @@ This project extends the [ipfs-pubsub-room](https://github.com/ipfs-shipyard/ipf
 
 Example of usage:
 ```ts
-import createRoom from 'rif-communications-pubsub'
+import { Room } from 'rif-communications-pubsub'
+import createlibp2p from 'rif-communications-pubsub/libp2p/nodejs'
 
-const room = createRoom('my_topic')
+const libp2p = await createlibp2p()
+const room = createRoom(libp2p, 'my_topic')
 
 room.on('peer joined', (peer: string) => {
   console.log('Peer joined the room ', peer)
