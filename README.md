@@ -39,11 +39,6 @@ import createRoom from 'rif-communications-pubsub'
 
 const room = createRoom('my_topic')
 
-// Subscribed to the room
-room.on('subscribed', () => {
-  console.log('Subscribed!')
-})
-
 room.on('peer joined', (peer: string) => {
   console.log('Peer joined the room ', peer)
 })
@@ -54,6 +49,10 @@ room.on('peer left', (peer: string) => {
 
 room.on('message', ({from, data}: {from: string, data: Buffer}) => {
   console.log('New message from ', peer, ' content ', data)
+})
+
+room.on('unsubscribed', () => {
+  console.log('Unsubscribed from the room room')
 })
 ```
 
@@ -69,9 +68,8 @@ room.hasPeer(cid: string)
 
 room.on('peer joined', (cid: string) => {})
 room.on('peer left', (cid: string) => {})
-room.on('subscribed', () => {})
-room.on('unsubscribed', () => {})
 room.on('message', (message: {from: string, data: Buffer}) => {})
+room.on('unsubscribed', () => {})
 ```
 
 ## License

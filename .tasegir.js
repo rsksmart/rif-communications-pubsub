@@ -1,5 +1,5 @@
 module.exports = {
   depCheck: {
-    ignore: ['tasegir', '@types/chai', '@types/mocha', '@types/sinon']
+    ignore: ['tasegir', '@types/chai', '@types/mocha']
   }
 }

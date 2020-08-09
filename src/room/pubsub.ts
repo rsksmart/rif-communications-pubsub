@@ -2,7 +2,7 @@ import Emittery from 'emittery'
 import diff from 'hyperdiff'
 import Libp2p from 'libp2p'
 
-import { toBuffer } from './utils'
+import { toBuffer } from '../utils'
 
 export interface Options {
   pollInterval?: number
@@ -13,15 +13,15 @@ export const DEFAULT_OPTIONS = {
 }
 
 export default class PubSubRoom extends Emittery {
-  protected libp2p: Libp2p
+  protected lp2p: Libp2p
   protected topic: string
   protected connectedPeers: string[]
   protected interval: NodeJS.Timeout
 
-  constructor (libp2p: Libp2p, topic: string, options = DEFAULT_OPTIONS) {
+  constructor (libp2p: Libp2p, topic: string, options?: Options) {
     super()
 
-    this.libp2p = libp2p
+    this.lp2p = libp2p
     this.topic = topic
     this.connectedPeers = []
 
@@ -34,18 +34,17 @@ export default class PubSubRoom extends Emittery {
 
     this.interval = setInterval(
       this.pollPeers,
-      options.pollInterval
+      options?.pollInterval || DEFAULT_OPTIONS.pollInterval
     )
 
     this.libp2p.pubsub.subscribe(this.topic, this.onMessage)
-    this.emit('subscribed')
   }
 
   /**
    * Periodically poll connectedPeers for latest messages
    *
    * @emits peer joined  When new peer joins the topic
-   * @emist peer left    When peer leaves the topic
+   * @emits peer left    When peer leaves the topic
    */
   private async pollPeers (): Promise<void> {
     const newPeers = (await this.libp2p.pubsub.getSubscribers(this.topic)).sort()
@@ -60,12 +59,20 @@ export default class PubSubRoom extends Emittery {
     }
   }
 
+  private onMessage (message: Buffer): void {
+    this.emit('message', message)
+  }
+
   public get peerId (): string {
     return this.libp2p.peerId.toB58String()
   }
 
   public get peers (): string[] {
     return this.connectedPeers.slice(0)
+  }
+
+  public get libp2p (): Libp2p {
+    return this.lp2p
   }
 
   public hasPeer (peer: string): boolean {
@@ -85,10 +92,6 @@ export default class PubSubRoom extends Emittery {
     const msg = toBuffer(message)
 
     await this.libp2p.pubsub.publish(this.topic, msg)
-  }
-
-  onMessage (message: Buffer): void {
-    this.emit('message', message)
   }
 }
 

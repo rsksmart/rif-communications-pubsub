@@ -1,19 +1,21 @@
 declare module 'libp2p' {
+  interface Options {
+    peerId: any
+    addresses: {
+      listen: string[]
+    }
+    modules: {
+      transport: any[]
+      streamMuxer: any[]
+      connEncryption: any[]
+      peerDiscovery: any[]
+      dht: any
+      pubsub: any
+    }}
   export default class Libp2p {
     peerId: any;
-    static create(config?: {
-      addresses: {
-        listen: string[]
-      }
-      modules: {
-        transport: any[]
-        streamMuxer: any[]
-        connEncryption: any[]
-        peerDiscovery: any[]
-        dht: any
-        pubsub: any
-      }
-    }): Promise<Libp2p>;
+    constructor(config?: Options)
+    static create(config?: Options): Promise<Libp2p>;
 
     start(): Promise<void>
     handle(PROTOCOL: any, handler: any): void
@@ -28,7 +30,7 @@ declare module 'libp2p' {
         }
     };
 
-    dialProtocol(peerInfo: any, PROTOCOL: string): Promise<{stream: any}>
+    dialProtocol(peerInfo: any, PROTOCOL: string): Promise<{stream: (data: Buffer) => Promise<void>, protocol: any}>
     pubsub: {
       subscribe(topic: string, onMessage: (message: Buffer) => void): void
       unsubscribe(topic: string, onMessage: (message: Buffer) => void): void
