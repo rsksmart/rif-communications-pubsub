@@ -10,7 +10,7 @@
 ![](https://img.shields.io/badge/npm-%3E%3D6.0.0-orange.svg?style=flat-square)
 ![](https://img.shields.io/badge/Node.js-%3E%3D10.0.0-orange.svg?style=flat-square)
 
-> Libary for creating a PubSub room with libp2p
+> Library for creating a PubSub room with libp2p
 
 This project extends the [ipfs-pubsub-room](https://github.com/ipfs-shipyard/ipfs-pubsub-room), rewriting it in typescript and adding libp2p node.
 
@@ -35,10 +35,9 @@ This project extends the [ipfs-pubsub-room](https://github.com/ipfs-shipyard/ipf
 
 Example of usage:
 ```ts
-import { Room } from 'rif-communications-pubsub'
-import createlibp2p from 'rif-communications-pubsub/libp2p/nodejs'
+import { Room, createLibP2P } from '@rsksmart/rif-communications-pubsub'
 
-const libp2p = await createlibp2p()
+const libp2p = await createLibP2P()
 const room = createRoom(libp2p, 'my_topic')
 
 room.on('peer joined', (peer: string) => {

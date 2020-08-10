@@ -113,4 +113,9 @@ web_modules/
 .pnp.*
 
 # Build folder
+lib
 dist
+
+# Tasegir files
+tsconfig.json
+.eslintrc.js

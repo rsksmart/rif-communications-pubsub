@@ -8,7 +8,7 @@ export const toBuffer = (message: string|Buffer): Buffer => {
   return Buffer.from(message)
 }
 
-export const createlibp2p = async (config: any): Promise<Libp2p> => {
+export const createLibP2P = async (config: any): Promise<Libp2p> => {
   let libp2p
 
   if (config?.peerId instanceof PeerId) {
