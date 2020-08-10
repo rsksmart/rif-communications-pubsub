@@ -1,7 +1,7 @@
 import chai from 'chai'
 
 import getLibp2p from '../../src/libp2p/nodejs'
-import { Room } from '../../src'
+import { DirectRoom } from '../../src/'
 
 function sleep<T> (ms: number, ...args: T[]): Promise<T> {
   return new Promise(resolve => setTimeout(() => resolve(...args), ms))
@@ -17,26 +17,26 @@ const libp2pconfig = {
     // TODO: remove
     // add a listen address (localhost) to accept TCP connections on a random port
     listen: ['/ip4/127.0.0.1/tcp/0']
-  },
-  config: { peerDiscovery: { bootstrap: { enabled: false } } }
+  }
 }
 
-describe('PubSub messaging', function () {
+describe('Direct messaging', function () {
   this.timeout(5000)
+
   const roomName = '0x0'
   const roomName2 = '0x1'
   let l1
   let l2
-  let provider: Room
-  let consumer1: Room
-  let consumer2: Room
+  let provider: DirectRoom
+  let consumer1: DirectRoom
+  let consumer2: DirectRoom
 
   before(async () => {
     l1 = await getLibp2p(libp2pconfig)
     l2 = await getLibp2p(libp2pconfig)
-    provider = new Room(l1, roomName, { pollInterval: 100 })
-    consumer1 = new Room(l2, roomName, { pollInterval: 100 })
-    consumer2 = new Room(l2, roomName2, { pollInterval: 100 })
+    provider = new DirectRoom(l1, roomName, { pollInterval: 100 })
+    consumer1 = new DirectRoom(l2, roomName, { pollInterval: 100 })
+    consumer2 = new DirectRoom(l2, roomName2, { pollInterval: 100 })
     await sleep(1000)
   })
 
@@ -46,13 +46,7 @@ describe('PubSub messaging', function () {
     const message = await promise
 
     expect(message).to.have.property('from', provider.peerId)
-    expect(message)
-      .to.have.property('data')
-      .to.eql(msg)
-    expect(message).to.have.property('seqno')
-    expect(message)
-      .to.have.property('topicIDs')
-      .to.eql([roomName])
+    expect(message).to.have.property('data')
   })
 
   it('consumer not in a room should not receive messages provider broadcasts', async () => {
@@ -66,18 +60,20 @@ describe('PubSub messaging', function () {
   it('peer joined and peer left events in a room', async () => {
     const l3 = await getLibp2p(libp2pconfig)
     let promise = provider.once('peer:joined')
-    const tmpCons = new Room(l3, roomName)
-    expect(await promise).to.equal(tmpCons.peerId)
+    const tmpCons = new DirectRoom(l3, roomName)
+    let out = await Promise.race([promise, sleep(800)])
+    expect(out).to.equal(tmpCons.peerId)
 
     promise = provider.once('peer:left')
     tmpCons.leave()
-    expect(await promise).to.equal(tmpCons.peerId)
+    out = await Promise.race([promise, sleep(800)])
+    expect(out).to.equal(tmpCons.peerId)
   })
 
   it('peer joined and peer left should not be observed in second room', async () => {
     const l3 = await getLibp2p(libp2pconfig)
     let promise = provider.once('peer:joined')
-    const tmpCons = new Room(l3, roomName2)
+    const tmpCons = new DirectRoom(l3, roomName2)
     let out = await Promise.race([promise, sleep(800, false)])
     expect(out).to.equal(false)
 
@@ -85,5 +81,23 @@ describe('PubSub messaging', function () {
     tmpCons.leave()
     out = await Promise.race([promise, sleep(800, false)])
     expect(out).to.equal(false)
+  })
+
+  it('should receive direct message', async () => {
+    const promise = consumer1.once('message')
+    await provider.sendTo(consumer1.peerId, msg)
+    const message = await promise
+
+    expect(message).to.have.property('from', provider.peerId)
+    expect(message).to.have.property('to', consumer1.peerId)
+  })
+
+  it('should receive another direct message', async () => {
+    const promise = consumer1.once('message')
+    await provider.sendTo(consumer1.peerId, msg)
+    const message = await promise
+
+    expect(message).to.have.property('from', provider.peerId)
+    expect(message).to.have.property('to', consumer1.peerId)
   })
 })
