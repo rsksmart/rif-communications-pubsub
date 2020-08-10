@@ -1,6 +1,6 @@
 import Emittery from 'emittery'
 import diff from 'hyperdiff'
-import Libp2p from 'libp2p'
+import type Libp2p from 'libp2p'
 
 import { toBuffer } from '../utils'
 
