@@ -48,7 +48,7 @@
     "libp2p-secio": "^0.13.0",
     "libp2p-tcp": "^0.15.0",
     "libp2p-webrtc-star": "^0.18.6",
-    "libp2p-websockets": "^0.13.6",
+    "libp2p-websockets": "^0.14.0",
     "peer-id": "^0.14.0"
   },
   "devDependencies": {
