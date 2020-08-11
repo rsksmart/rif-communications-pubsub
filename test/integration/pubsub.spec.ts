@@ -43,7 +43,9 @@ describe('PubSub messaging', function () {
     const message = await promise
 
     expect(message).to.have.property('from', provider.peerId)
-    expect(message).to.have.property('data')
+    expect(message).to.have.property('data').to.eql(Buffer.from(msg))
+    expect(message).to.have.property('seqno')
+    expect(message).to.have.property('topicIDs').to.eql([roomName])
   })
 
   it('consumer not in a room should not receive messages provider broadcasts', async () => {
@@ -56,12 +58,12 @@ describe('PubSub messaging', function () {
 
   it('peer joined and peer left events in a room', async () => {
     const l3 = await getLibp2p(libp2pconfig)
-    let promise = provider.once('peer joined')
+    let promise = provider.once('peer:joined')
     const tmpCons = new Room(l3, roomName)
     let out = await Promise.race([promise, sleep(800)])
     expect(out).to.equal(tmpCons.peerId)
 
-    promise = provider.once('peer left')
+    promise = provider.once('peer:left')
     tmpCons.leave()
     out = await Promise.race([promise, sleep(800)])
     expect(out).to.equal(tmpCons.peerId)
@@ -69,12 +71,12 @@ describe('PubSub messaging', function () {
 
   it('peer joined and peer left should not be observed in second room', async () => {
     const l3 = await getLibp2p(libp2pconfig)
-    let promise = provider.once('peer joined')
+    let promise = provider.once('peer:joined')
     const tmpCons = new Room(l3, roomName2)
     let out = await Promise.race([promise, sleep(800, false)])
     expect(out).to.equal(false)
 
-    promise = provider.once('peer left')
+    promise = provider.once('peer:left')
     tmpCons.leave()
     out = await Promise.race([promise, sleep(800, false)])
     expect(out).to.equal(false)

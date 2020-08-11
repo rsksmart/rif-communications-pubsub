@@ -40,11 +40,11 @@ import { Room, createLibP2P } from '@rsksmart/rif-communications-pubsub'
 const libp2p = await createLibP2P()
 const room = createRoom(libp2p, 'my_topic')
 
-room.on('peer joined', (peer: string) => {
+room.on('peer:joined', (peer: string) => {
   console.log('Peer joined the room ', peer)
 })
 
-room.on('peer left', (peer: string) => {
+room.on('peer:left', (peer: string) => {
   console.log('Peer left the room', peer)
 })
 
@@ -59,7 +59,9 @@ room.on('unsubscribed', () => {
 
 ## API
 ```ts
-const room = createRoom(topic) // Creates room with specific topic
+const libp2p = await createLibP2P()
+
+const room = createRoom(libp2p, topic) // Creates room with specific topic
 room.leave() // Leave the room, stop libp2p
 async room.broadcast(message: string | buffer) // Send message to the room
 
@@ -67,9 +69,9 @@ room.peerId
 room.peers
 room.hasPeer(cid: string)
 
-room.on('peer joined', (cid: string) => {})
-room.on('peer left', (cid: string) => {})
-room.on('message', (message: {from: string, data: Buffer}) => {})
+room.on('peer:joined', (cid: string) => {})
+room.on('peer:left', (cid: string) => {})
+room.on('message', (message: {from: string, data: Buffer, to?: string}) => {})
 room.on('unsubscribed', () => {})
 ```
 
