@@ -1,6 +1,7 @@
 import Emittery from 'emittery'
 import diff from 'hyperdiff'
 import type Libp2p from 'libp2p'
+import type{ Message } from './Message'
 
 import { toBuffer } from '../utils'
 
@@ -12,7 +13,7 @@ export const DEFAULT_OPTIONS = {
   pollInterval: 1000
 }
 
-export default class PubSubRoom extends Emittery {
+export default class PubSubRoom extends Emittery.Typed<{'peer:joined': string, 'peer:left': string, 'message': Message}, 'unsubscribed'> {
   protected lp2p: Libp2p
   protected topic: string
   protected connectedPeers: string[]
@@ -43,24 +44,24 @@ export default class PubSubRoom extends Emittery {
   /**
    * Periodically poll connectedPeers for latest messages
    *
-   * @emits peer joined  When new peer joins the topic
-   * @emits peer left    When peer leaves the topic
+   * @emits peer:joined  When new peer joins the topic
+   * @emits peer:left    When peer leaves the topic
    */
   private async pollPeers (): Promise<void> {
     const newPeers = (await this.libp2p.pubsub.getSubscribers(this.topic)).sort()
 
     const differences = diff(this.connectedPeers, newPeers)
 
-    differences.added.forEach((peer: string) => this.emit('peer joined', peer))
-    differences.removed.forEach((peer: string) => this.emit('peer left', peer))
+    differences.added.forEach((peer: string) => this.emit('peer:joined', peer))
+    differences.removed.forEach((peer: string) => this.emit('peer:left', peer))
 
     if (differences.added.length > 0 || differences.removed.length > 0) {
       this.connectedPeers = newPeers
     }
   }
 
-  private onMessage (message: Buffer): void {
-    this.emit('message', message)
+  private onMessage (message: any): void {
+    this.emit('message', message as Message)
   }
 
   public get peerId (): string {
