@@ -115,6 +115,7 @@ web_modules/
 # Build folder
 lib
 dist
+types
 
 # Tasegir files
 tsconfig.json

@@ -1,6 +1,6 @@
 {
   "name": "@rsksmart/rif-communications-pubsub",
-  "version": "0.1.0-dev1",
+  "version": "0.1.0-dev.2",
   "description": "PubSub module",
   "keywords": [
     "RIF",
