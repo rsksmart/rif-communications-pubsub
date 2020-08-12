@@ -1,6 +1,6 @@
 {
   "name": "@rsksmart/rif-communications-pubsub",
-  "version": "0.1.0-dev.2",
+  "version": "0.1.0-dev.3",
   "description": "PubSub module",
   "keywords": [
     "RIF",
@@ -64,6 +64,7 @@
   "types": "types/index.d.ts",
   "contributors": [
     "Adam Uhlíř <adam@uhlir.dev>",
-    "Vojtech Simetka <vojtech@simetka.cz>"
+    "Vojtech Simetka <vojtech@simetka.cz>",
+    "dependabot-preview[bot] <27856297+dependabot-preview[bot]@users.noreply.github.com>"
   ]
 }
