@@ -1,3 +1,13 @@
+<a name="0.1.0-dev.3"></a>
+# [0.1.0-dev.3](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.2...v0.1.0-dev.3) (2020-08-12)
+
+
+### Bug Fixes
+
+* added types for the event emitter ([343b82e](https://github.com/rsksmart/rif-communications-pubsub/commit/343b82e))
+
+
+
 <a name="0.1.0-dev.2"></a>
 # [0.1.0-dev.2](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev1...v0.1.0-dev.2) (2020-08-11)
 
