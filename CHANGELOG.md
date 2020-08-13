@@ -1,3 +1,13 @@
+<a name="0.1.0-dev.4"></a>
+# [0.1.0-dev.4](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.3...v0.1.0-dev.4) (2020-08-13)
+
+
+### Bug Fixes
+
+* use deep merge for configs ([#18](https://github.com/rsksmart/rif-communications-pubsub/issues/18)) ([0d64f7f](https://github.com/rsksmart/rif-communications-pubsub/commit/0d64f7f))
+
+
+
 <a name="0.1.0-dev.3"></a>
 # [0.1.0-dev.3](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.2...v0.1.0-dev.3) (2020-08-12)
 
