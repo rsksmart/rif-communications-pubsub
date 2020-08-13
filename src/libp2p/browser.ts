@@ -5,9 +5,10 @@ import { NOISE } from 'libp2p-noise'
 import SECIO from 'libp2p-secio'
 import KadDHT from 'libp2p-kad-dht'
 import GossipSub from 'libp2p-gossipsub'
+import Libp2p from 'libp2p'
+import _ from 'lodash'
 
 import { createLibP2P } from '../utils'
-import Libp2p from 'libp2p'
 
 // Reccommended config as per https://github.com/ipfs/js-ipfs/blob/master/packages/ipfs/src/core/runtime/libp2p-browser.js
 
@@ -63,4 +64,4 @@ const config = {
   }
 }
 
-export default (conf?: any): Promise<Libp2p> => createLibP2P({ ...config, ...conf })
+export default (conf?: any): Promise<Libp2p> => createLibP2P(_.merge(config, conf))

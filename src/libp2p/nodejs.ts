@@ -9,6 +9,7 @@ import GossipSub from 'libp2p-gossipsub'
 
 import { createLibP2P } from '../utils'
 import Libp2p from 'libp2p'
+import _ from 'lodash'
 
 // Reccommended config as per https://github.com/ipfs/js-ipfs/blob/master/packages/ipfs/src/core/runtime/libp2p-nodejs.js
 
@@ -63,4 +64,4 @@ const config = {
   }
 }
 
-export default (conf?: any): Promise<Libp2p> => createLibP2P({ ...config, ...conf })
+export default (conf?: any): Promise<Libp2p> => createLibP2P(_.merge(config, conf))
