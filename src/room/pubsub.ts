@@ -60,7 +60,7 @@ export default class PubSubRoom extends Emittery.Typed<{'peer:joined': string, '
     }
   }
 
-  private onMessage (message: any): void {
+  protected onMessage (message: any): void {
     this.emit('message', message as Message)
   }
 
