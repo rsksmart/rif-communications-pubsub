@@ -38,6 +38,7 @@ export default class PubSubRoomDirect extends PubSubRoom {
     super(libp2p, topic, options)
 
     this.handleDirect = this.handleDirect.bind(this)
+    this.emitTest = this.emitTest.bind(this)
 
     this.connections = {}
     this.libp2p.handle(PROTOCOL, this.handleDirect)
@@ -69,12 +70,18 @@ export default class PubSubRoomDirect extends PubSubRoom {
             topicIDs: msg.topicIDs,
             seqno: msg.seqno
           }
-          this.emit('message', m)
+          this.emitTest(m)
           // eslint-disable-next-line
           console.log('emitter called')
         }
       }
     )
+  }
+
+  private emitTest (m: Message) {
+    // eslint-disable-next-line
+    console.log('emitting direct message')
+    this.emit('message', m)
   }
 
   public leave () {

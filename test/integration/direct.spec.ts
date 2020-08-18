@@ -84,10 +84,10 @@ describe('Direct messaging', function () {
   })
 
   it('should receive direct message', async () => {
-    consumer1.on('message', ({ from }) =>
+    consumer1.on('message', ({ to }) => {
       // eslint-disable-next-line
-      console.log(`got direct message from ${from}`)
-    )
+      if (to) console.log(`got direct message from ${to}`)
+    })
     const promise = consumer1.once('message')
     await provider.sendTo(consumer1.peerId, msg)
     const message = await promise
