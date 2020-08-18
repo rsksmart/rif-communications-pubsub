@@ -7,6 +7,7 @@ import KadDHT from 'libp2p-kad-dht'
 import GossipSub from 'libp2p-gossipsub'
 import Libp2p from 'libp2p'
 import _ from 'lodash'
+import Bootstrap from 'libp2p-bootstrap'
 
 import { createLibP2P } from '../utils'
 
@@ -28,7 +29,7 @@ const config = {
       SECIO,
       NOISE
     ],
-    peerDiscovery: [],
+    peerDiscovery: [Bootstrap],
     dht: KadDHT,
     pubsub: GossipSub
   },

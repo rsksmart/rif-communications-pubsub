@@ -40,6 +40,7 @@
     "emittery": "^0.7.1",
     "hyperdiff": "^2.0.6",
     "libp2p": "^0.28.10",
+    "libp2p-bootstrap": "^0.11.0",
     "libp2p-gossipsub": "^0.4.6",
     "libp2p-kad-dht": "^0.20.0",
     "libp2p-mdns": "^0.14.3",

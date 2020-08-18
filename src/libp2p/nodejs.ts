@@ -6,6 +6,7 @@ import { NOISE } from 'libp2p-noise'
 import SECIO from 'libp2p-secio'
 import KadDHT from 'libp2p-kad-dht'
 import GossipSub from 'libp2p-gossipsub'
+import Bootstrap from 'libp2p-bootstrap'
 
 import { createLibP2P } from '../utils'
 import Libp2p from 'libp2p'
@@ -29,7 +30,7 @@ const config = {
       SECIO,
       NOISE
     ],
-    peerDiscovery: [MulticastDNS],
+    peerDiscovery: [Bootstrap, MulticastDNS],
     dht: KadDHT,
     pubsub: GossipSub
   },

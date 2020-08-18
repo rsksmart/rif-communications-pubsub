@@ -16,7 +16,8 @@ const libp2pconfig = {
     // TODO: remove
     // add a listen address (localhost) to accept TCP connections on a random port
     listen: ['/ip4/127.0.0.1/tcp/0']
-  }
+  },
+  config: { peerDiscovery: { bootstrap: { enabled: false } } }
 }
 
 describe('PubSub messaging', function () {

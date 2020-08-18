@@ -14,7 +14,10 @@ describe('Libp2p', function () {
   const peerId = 'QmZGZ4o7yevkDFgokE8dWJwGd1tixQFYqPQE7vp4t5iyeN'
 
   before(async () => {
-    l1 = await getLibp2p({ peerId: PeerId.createFromB58String(peerId) })
+    l1 = await getLibp2p({
+      peerId: PeerId.createFromB58String(peerId),
+      config: { peerDiscovery: { bootstrap: { enabled: false } } }
+    })
     await sleep(1000)
   })
 
