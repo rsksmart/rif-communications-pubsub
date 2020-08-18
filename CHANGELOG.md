@@ -1,3 +1,13 @@
+<a name="0.1.0-dev.5"></a>
+# [0.1.0-dev.5](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.4...v0.1.0-dev.5) (2020-08-18)
+
+
+### Features
+
+* support for libp2p bootstrap ([65d43ca](https://github.com/rsksmart/rif-communications-pubsub/commit/65d43ca))
+
+
+
 <a name="0.1.0-dev.4"></a>
 # [0.1.0-dev.4](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.3...v0.1.0-dev.4) (2020-08-13)
 
