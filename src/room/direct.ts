@@ -2,45 +2,9 @@ import PubSubRoom, { Options } from './pubsub'
 import Libp2p from 'libp2p'
 import PeerId from 'peer-id'
 import pipe from 'it-pipe'
-import Emittery from 'emittery'
 import { Message } from './Message'
 
 const PROTOCOL = 'rif-communications-pubsub/v0.1.0'
-
-const emitter = new Emittery()
-
-const handleDirect = ({ stream, connection }: any): void => {
-  const remotePeer = connection.remotePeer.toB58String()
-  let d = ''
-  let msg
-  pipe(
-    stream,
-    async source => {
-      for await (const message of source) {
-        d += message.toString()
-
-        try {
-          msg = JSON.parse(d)
-        } catch (error) {
-          continue
-        }
-
-        if (msg.from !== remotePeer) {
-          continue
-        }
-        const m: Message = {
-          from: msg.from,
-          to: msg.to,
-          data: Buffer.from(msg.data, 'hex'),
-          topicIDs: msg.topicIDs,
-          seqno: msg.seqno
-        }
-
-        emitter.emit('direct', m)
-      }
-    }
-  )
-}
 
 class Connection {
   stream: any
@@ -73,13 +37,48 @@ export default class PubSubRoomDirect extends PubSubRoom {
   constructor (libp2p: Libp2p, topic: string, options?: Options) {
     super(libp2p, topic, options)
 
+    this.handleDirect = this.handleDirect.bind(this)
+
     this.connections = {}
-    this.libp2p.handle(PROTOCOL, handleDirect)
-    emitter.on('direct', this.onMessage)
+    this.libp2p.handle(PROTOCOL, this.handleDirect)
+  }
+
+  private handleDirect ({ stream, connection }: any): void {
+    const remotePeer = connection.remotePeer.toB58String()
+    let d = ''
+    let msg
+    pipe(
+      stream,
+      async source => {
+        for await (const message of source) {
+          d += message.toString()
+
+          try {
+            msg = JSON.parse(d)
+          } catch (error) {
+            continue
+          }
+
+          if (msg.from !== remotePeer) {
+            continue
+          }
+          const m: Message = {
+            from: msg.from,
+            to: msg.to,
+            data: Buffer.from(msg.data, 'hex'),
+            topicIDs: msg.topicIDs,
+            seqno: msg.seqno
+          }
+          this.emit('message', m)
+          // eslint-disable-next-line
+          console.log('emitter called')
+        }
+      }
+    )
   }
 
   public leave () {
-    this.libp2p.unhandle(PROTOCOL, handleDirect)
+    this.libp2p.unhandle(PROTOCOL, this.handleDirect)
     // Object.keys(this.connections).forEach((peer) => {
     //   this.connections[peer].stop()
     // })

@@ -21,7 +21,7 @@ const libp2pconfig = {
 }
 
 describe('Direct messaging', function () {
-  this.timeout(5000)
+  this.timeout(10000)
 
   const roomName = '0x0'
   const roomName2 = '0x1'
@@ -84,6 +84,10 @@ describe('Direct messaging', function () {
   })
 
   it('should receive direct message', async () => {
+    consumer1.on('message', ({ from }) =>
+      // eslint-disable-next-line
+      console.log(`got direct message from ${from}`)
+    )
     const promise = consumer1.once('message')
     await provider.sendTo(consumer1.peerId, msg)
     const message = await promise
