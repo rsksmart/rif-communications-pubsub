@@ -46,6 +46,11 @@ declare module 'libp2p' {
       unsubscribe (topic: string, onMessage: MessageHandler): void
       publish (topic: string, message: Buffer): Promise<void>
       getSubscribers (topic: string): Promise<[]>
+      _pubsub: {
+        _options: {
+          enabled: boolean
+        }
+      }
     }
 
     connections: {

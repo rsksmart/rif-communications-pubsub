@@ -1,11 +1,10 @@
 import chai from 'chai'
 
 import getLibp2p from '../../src/libp2p/nodejs'
-import { DirectRoom } from '../../src/'
-
-function sleep<T> (ms: number, ...args: T[]): Promise<T> {
-  return new Promise(resolve => setTimeout(() => resolve(...args), ms))
-}
+import { DirectChat, PROTOCOL } from '../../src/'
+import type Libp2p from 'libp2p'
+import PeerId from 'peer-id'
+import pipe from 'it-pipe'
 
 const expect = chai.expect
 
@@ -17,87 +16,99 @@ const libp2pconfig = {
     // TODO: remove
     // add a listen address (localhost) to accept TCP connections on a random port
     listen: ['/ip4/127.0.0.1/tcp/0']
-  }
+  },
+  config: { peerDiscovery: { bootstrap: { enabled: false } } }
 }
 
-describe('Direct messaging', function () {
+describe('Direct protocol messaging', function () {
   this.timeout(5000)
 
-  const roomName = '0x0'
-  const roomName2 = '0x1'
-  let l1
-  let l2
-  let provider: DirectRoom
-  let consumer1: DirectRoom
-  let consumer2: DirectRoom
+  let l1: Libp2p
+  let l2: Libp2p
+  let node1: DirectChat
+  let node2a: DirectChat
+  let node2b: DirectChat
 
   before(async () => {
     l1 = await getLibp2p(libp2pconfig)
     l2 = await getLibp2p(libp2pconfig)
-    provider = new DirectRoom(l1, roomName, { pollInterval: 100 })
-    consumer1 = new DirectRoom(l2, roomName, { pollInterval: 100 })
-    consumer2 = new DirectRoom(l2, roomName2, { pollInterval: 100 })
-    await sleep(1000)
+    node1 = DirectChat.getDirectChat(l1)
+    node2a = DirectChat.getDirectChat(l2)
+    node2b = DirectChat.getDirectChat(l2)
   })
 
-  it('consumer in a room should receive messages provider broadcasts', async () => {
-    const promise = consumer1.once('message')
-    provider.broadcast(msg)
+  it('node receives direct message', async () => {
+    const promise = node1.once('message')
+    node2a.sendTo(node1.peerId, msg)
     const message = await promise
 
-    expect(message).to.have.property('from', provider.peerId)
-    expect(message).to.have.property('data')
+    expect(message).to.have.property('from', node2a.peerId)
+    expect(message).to.have.property('to', node1.peerId)
+    expect(message).to.have.property('data').and.to.eql(msg)
   })
 
-  it('consumer not in a room should not receive messages provider broadcasts', async () => {
-    const promise = consumer2.once('message')
-    provider.broadcast('message')
-    const out = await Promise.race([promise, sleep(1000, false)])
-
-    expect(out).to.equal(false)
-  })
-
-  it('peer joined and peer left events in a room', async () => {
-    const l3 = await getLibp2p(libp2pconfig)
-    let promise = provider.once('peer:joined')
-    const tmpCons = new DirectRoom(l3, roomName)
-    let out = await Promise.race([promise, sleep(800)])
-    expect(out).to.equal(tmpCons.peerId)
-
-    promise = provider.once('peer:left')
-    tmpCons.leave()
-    out = await Promise.race([promise, sleep(800)])
-    expect(out).to.equal(tmpCons.peerId)
-  })
-
-  it('peer joined and peer left should not be observed in second room', async () => {
-    const l3 = await getLibp2p(libp2pconfig)
-    let promise = provider.once('peer:joined')
-    const tmpCons = new DirectRoom(l3, roomName2)
-    let out = await Promise.race([promise, sleep(800, false)])
-    expect(out).to.equal(false)
-
-    promise = provider.once('peer:left')
-    tmpCons.leave()
-    out = await Promise.race([promise, sleep(800, false)])
-    expect(out).to.equal(false)
-  })
-
-  it('should receive direct message', async () => {
-    const promise = consumer1.once('message')
-    await provider.sendTo(consumer1.peerId, msg)
+  it('node receives repeated direct message', async () => {
+    const promise = node1.once('message')
+    node2a.sendTo(node1.peerId, msg)
     const message = await promise
 
-    expect(message).to.have.property('from', provider.peerId)
-    expect(message).to.have.property('to', consumer1.peerId)
+    expect(message).to.have.property('from', node2a.peerId)
+    expect(message).to.have.property('to', node1.peerId)
+    expect(message).to.have.property('data').and.to.eql(msg)
   })
 
-  it('should receive another direct message', async () => {
-    const promise = consumer1.once('message')
-    await provider.sendTo(consumer1.peerId, msg)
+  it('bidirectional communication', async () => {
+    let promise = node1.once('message')
+    node2a.sendTo(node1.peerId, msg)
     const message = await promise
 
-    expect(message).to.have.property('from', provider.peerId)
-    expect(message).to.have.property('to', consumer1.peerId)
+    promise = node2a.once('message')
+    node1.sendTo(node2a.peerId, msg)
+    const message2 = await promise
+
+    expect(message).to.have.property('from', node2a.peerId)
+    expect(message).to.have.property('to', node1.peerId)
+    expect(message).to.have.property('data').and.to.eql(msg)
+    expect(message2).to.have.property('from', node1.peerId)
+    expect(message2).to.have.property('to', node2a.peerId)
+    expect(message2).to.have.property('data').and.to.eql(msg)
+  })
+
+  it('peers with same libp2p instance get direct message', async () => {
+    const promise2 = node2a.once('message')
+    const promise3 = node2b.once('message')
+    node1.sendTo(node2a.peerId, msg)
+    const message2 = await promise2
+    const message3 = await promise3
+
+    expect(message2).to.have.property('from', node1.peerId)
+    expect(message2).to.have.property('to', node2a.peerId)
+    expect(message2).to.have.property('data').and.to.eql(msg)
+    expect(message3).to.have.property('from', node1.peerId)
+    expect(message3).to.have.property('to', node2b.peerId)
+    expect(message3).to.have.property('data').and.to.eql(msg)
+  })
+
+  it('should throw on non JSON message', async () => {
+    const promise = node2a.once('error')
+
+    const p = PeerId.createFromCID(node2a.peerId)
+    const peerInfo = l1.peerStore.get(p)
+    const { stream } = await l1.dialProtocol(peerInfo.id, PROTOCOL)
+
+    const msg = {
+      from: l1.peerId.toB58String(),
+      to: node2a.peerId,
+      data: Buffer.from('{hello').toString('hex')
+    }
+
+    await pipe(
+      JSON.stringify(msg),
+      stream
+    )
+
+    const err = await promise
+
+    expect(err).to.be.instanceof(Error)
   })
 })

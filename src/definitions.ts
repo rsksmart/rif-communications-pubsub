@@ -3,9 +3,14 @@ export type JsonObject = { [member: string]: JsonSerializable }
 export type JsonArray = JsonSerializable[]
 export type JsonSerializable = JsonPrimitive | JsonObject | JsonArray
 
+export interface MessageDirect<T = JsonSerializable> {
+  from: string
+  to: string
+  data: T
+}
+
 export interface Message<T = JsonSerializable> {
   from: string
-  to?: string
   data: T
   seqno: Buffer
   topicIDs: Array<string>
@@ -16,4 +21,8 @@ export interface Message<T = JsonSerializable> {
 export interface Options {
   pollInterval?: number
   ignoreSelfMessages?: boolean
+}
+
+export interface Dictionary<T> {
+  [key: string]: T
 }
