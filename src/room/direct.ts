@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import PubSubRoom, { Options } from './pubsub'
 import Libp2p from 'libp2p'
 import PeerId from 'peer-id'
@@ -41,7 +42,7 @@ export default class PubSubRoomDirect extends PubSubRoom {
     this.emitTest = this.emitTest.bind(this)
 
     this.connections = {}
-    this.libp2p.handle(PROTOCOL, this.handleDirect)
+    this.libp2p.handle(PROTOCOL, this.handleDirect.bind(this))
   }
 
   private handleDirect ({ stream, connection }: any): void {
@@ -79,9 +80,8 @@ export default class PubSubRoomDirect extends PubSubRoom {
   }
 
   private emitTest (m: Message) {
-    // eslint-disable-next-line
     console.log('emitting direct message')
-    this.emit('message', m)
+    this.onMessage(m)
   }
 
   public leave () {

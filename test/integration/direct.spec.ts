@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import chai from 'chai'
 
 import getLibp2p from '../../src/libp2p/nodejs'
@@ -84,10 +85,11 @@ describe('Direct messaging', function () {
   })
 
   it('should receive direct message', async () => {
-    consumer1.on('message', ({ to }) => {
-      // eslint-disable-next-line
-      if (to) console.log(`got direct message from ${to}`)
-    })
+    console.log('Consumer1.peerId: ', consumer1.peerId)
+    console.log('Provider.peerId: ', provider.peerId)
+
+    consumer1.onAny(console.log)
+
     const promise = consumer1.once('message')
     await provider.sendTo(consumer1.peerId, msg)
     const message = await promise
