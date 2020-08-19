@@ -5,8 +5,9 @@ import type Libp2p from 'libp2p'
 import { toBuffer } from '../utils'
 import type { JsonSerializable, Message, Options } from '../definitions'
 
-export const DEFAULT_OPTIONS = {
-  pollInterval: 1000
+export const DEFAULT_OPTIONS: Options = {
+  pollInterval: 1000,
+  ignoreSelfMessages: false
 }
 
 export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 'peer:left': string, 'message': Message, 'error': Error }, 'unsubscribed'> {
@@ -14,13 +15,16 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
   protected topic: string
   protected connectedPeers: string[]
   protected interval: NodeJS.Timeout
+  private ignoreSelfMessages: boolean
 
   constructor (libp2p: Libp2p, topic: string, options?: Options) {
     super()
 
+    options = Object.assign(DEFAULT_OPTIONS, options)
     this.lp2p = libp2p
     this.topic = topic
     this.connectedPeers = []
+    this.ignoreSelfMessages = Boolean(options?.ignoreSelfMessages)
 
     this.onMessage = this.onMessage.bind(this)
     this.pollPeers = this.pollPeers.bind(this)
@@ -31,7 +35,7 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
 
     this.interval = setInterval(
       this.pollPeers,
-      options?.pollInterval || DEFAULT_OPTIONS.pollInterval
+      options.pollInterval!
     )
 
     this.libp2p.pubsub.subscribe(this.topic, this.onMessage)
@@ -57,6 +61,10 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
   }
 
   private onMessage (message: Message<Buffer>): void {
+    if (message.from === this.peerId && this.ignoreSelfMessages) {
+      return
+    }
+
     try {
       const parsedData = JSON.parse(message.data!.toString()) as JsonSerializable
       const newMessage: Message = { ...message, data: parsedData }

@@ -61,13 +61,11 @@ describe('PubSub messaging', function () {
     const l3 = await getLibp2p(libp2pconfig)
     let promise = provider.once('peer:joined')
     const tmpCons = new Room(l3, roomName)
-    let out = await Promise.race([promise, sleep(1000, 'timedout')])
-    expect(out).to.equal(tmpCons.peerId)
+    expect(await promise).to.equal(tmpCons.peerId)
 
     promise = provider.once('peer:left')
     tmpCons.leave()
-    out = await Promise.race([promise, sleep(1000, 'timedout')])
-    expect(out).to.equal(tmpCons.peerId)
+    expect(await promise).to.equal(tmpCons.peerId)
   })
 
   it('peer joined and peer left should not be observed in second room', async () => {
