@@ -61,7 +61,7 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
   }
 
   private onMessage (message: Message<Buffer>): void {
-    if (message.from === this.peerId && this.ignoreSelfMessages) {
+    if (this.ignoreSelfMessages && message.from === this.peerId) {
       return
     }
 
