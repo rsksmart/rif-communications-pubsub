@@ -1,19 +1,15 @@
 import Emittery from 'emittery'
 import diff from 'hyperdiff'
 import type Libp2p from 'libp2p'
-import type{ Message } from './Message'
 
 import { toBuffer } from '../utils'
-
-export interface Options {
-  pollInterval?: number
-}
+import type { JsonSerializable, Message, Options } from '../definitions'
 
 export const DEFAULT_OPTIONS = {
   pollInterval: 1000
 }
 
-export default class PubSubRoom extends Emittery.Typed<{'peer:joined': string, 'peer:left': string, 'message': Message}, 'unsubscribed'> {
+export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 'peer:left': string, 'message': Message, 'error': Error }, 'unsubscribed'> {
   protected lp2p: Libp2p
   protected topic: string
   protected connectedPeers: string[]
@@ -60,8 +56,14 @@ export default class PubSubRoom extends Emittery.Typed<{'peer:joined': string, '
     }
   }
 
-  private onMessage (message: any): void {
-    this.emit('message', message as Message)
+  private onMessage (message: Message<Buffer>): void {
+    try {
+      const parsedData = JSON.parse(message.data!.toString()) as JsonSerializable
+      const newMessage: Message = { ...message, data: parsedData }
+      this.emit('message', newMessage)
+    } catch (e) {
+      this.emit('error', e)
+    }
   }
 
   public get peerId (): string {
@@ -87,11 +89,10 @@ export default class PubSubRoom extends Emittery.Typed<{'peer:joined': string, '
   }
 
   /**
-   * Broacast message to the topic
+   * Broadcast message to the topic
    */
-  public async broadcast (message: string | Buffer): Promise<void> {
-    const msg = toBuffer(message)
-
+  public async broadcast (message: JsonSerializable): Promise<void> {
+    const msg = toBuffer(JSON.stringify(message))
     await this.libp2p.pubsub.publish(this.topic, msg)
   }
 }
