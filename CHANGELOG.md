@@ -1,3 +1,14 @@
+<a name="0.1.0-dev.6"></a>
+# [0.1.0-dev.6](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.5...v0.1.0-dev.6) (2020-08-19)
+
+
+### Features
+
+* ignore self message option ([f539aae](https://github.com/rsksmart/rif-communications-pubsub/commit/f539aae))
+* jsonseriazable messages ([0b3ee3b](https://github.com/rsksmart/rif-communications-pubsub/commit/0b3ee3b))
+
+
+
 <a name="0.1.0-dev.5"></a>
 # [0.1.0-dev.5](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.4...v0.1.0-dev.5) (2020-08-18)
 
