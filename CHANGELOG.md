@@ -1,3 +1,14 @@
+<a name="0.1.0-dev.7"></a>
+# [0.1.0-dev.7](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.6...v0.1.0-dev.7) (2020-08-20)
+
+
+### Features
+
+* direct comms ([#20](https://github.com/rsksmart/rif-communications-pubsub/issues/20)) ([3154cdf](https://github.com/rsksmart/rif-communications-pubsub/commit/3154cdf))
+* enable random walk ([5df1fe6](https://github.com/rsksmart/rif-communications-pubsub/commit/5df1fe6))
+
+
+
 <a name="0.1.0-dev.6"></a>
 # [0.1.0-dev.6](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.5...v0.1.0-dev.6) (2020-08-19)
 
