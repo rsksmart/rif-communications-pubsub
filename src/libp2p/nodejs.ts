@@ -44,12 +44,13 @@ const config = {
         enabled: true
       }
     },
-    dht: {
+    dht: { // The DHT options (and defaults) can be found in its documentation
       kBucketSize: 20,
-      enabled: false,
-      clientMode: true,
+      enabled: true,
       randomWalk: {
-        enabled: false
+        enabled: true, // Allows to disable discovery (enabled by default)
+        interval: 300e3,
+        timeout: 10e3
       }
     },
     pubsub: {
