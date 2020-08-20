@@ -2,8 +2,8 @@ import Emittery from 'emittery'
 import diff from 'hyperdiff'
 import type Libp2p from 'libp2p'
 
-import { toBuffer } from '../utils'
-import type { JsonSerializable, Message, Options } from '../definitions'
+import { toBuffer } from './utils'
+import type { JsonSerializable, Message, Options } from './definitions'
 
 export const DEFAULT_OPTIONS: Options = {
   pollInterval: 1000,
@@ -24,12 +24,12 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
     this.lp2p = libp2p
     this.topic = topic
     this.connectedPeers = []
-    this.ignoreSelfMessages = Boolean(options?.ignoreSelfMessages)
+    this.ignoreSelfMessages = Boolean(options.ignoreSelfMessages)
 
     this.onMessage = this.onMessage.bind(this)
     this.pollPeers = this.pollPeers.bind(this)
 
-    if (!this.libp2p.pubsub) {
+    if (!this.libp2p.pubsub || !this.libp2p.pubsub._pubsub._options.enabled) {
       throw new Error('pubsub has not been configured')
     }
 

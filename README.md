@@ -35,7 +35,7 @@ This project extends the [ipfs-pubsub-room](https://github.com/ipfs-shipyard/ipf
 
 Example of usage:
 ```ts
-import { Room, createLibP2P } from '@rsksmart/rif-communications-pubsub'
+import { Room, DirectChat, createLibP2P, Message, MessageDirect } from '@rsksmart/rif-communications-pubsub'
 
 const libp2p = await createLibP2P()
 const room = createRoom(libp2p, 'my_topic')
@@ -48,12 +48,18 @@ room.on('peer:left', (peer: string) => {
   console.log('Peer left the room', peer)
 })
 
-room.on('message', ({from, data}: {from: string, data: Buffer}) => {
+room.on('message', ({from, data}: Message) => {
   console.log('New message from ', peer, ' content ', data)
 })
 
 room.on('unsubscribed', () => {
   console.log('Unsubscribed from the room room')
+})
+
+const directChat = DirectChat.getDirectChat(libp2p)
+
+directChat.on('message', ({from, to, data}: MessageDirect) => {
+  console.log('New direct message from ', peer, ' to ', to, ' content ', data)
 })
 ```
 
@@ -62,17 +68,32 @@ room.on('unsubscribed', () => {
 const libp2p = await createLibP2P()
 
 const room = createRoom(libp2p, topic) // Creates room with specific topic
-room.leave() // Leave the room, stop libp2p
+
+// Methods
+room.leave() // Leave the room
 async room.broadcast(message: string | buffer) // Send message to the room
 
+// Getters
 room.peerId
 room.peers
-room.hasPeer(cid: string)
+room.hasPeer(peerId: string)
+room.libp2p
 
-room.on('peer:joined', (cid: string) => {})
-room.on('peer:left', (cid: string) => {})
-room.on('message', (message: {from: string, data: Buffer, to?: string}) => {})
+// Listeners
+room.on('peer:joined', (peerId: string) => {})
+room.on('peer:left', (peerId: string) => {})
+room.on('message', (message: Message) => {})
 room.on('unsubscribed', () => {})
+room.on('error', (error: Error) => {})
+
+const directChat = DirectChat.getDirectChat(libp2p)
+
+// Methods
+directChat.sendTo('somePeerId', {level: 'info', msg: 'hello world with custom object'})
+
+// Listeners
+directChat.on('message', (message: MessageDirect) => {})
+directChat.on('error', (error: Error) => {})
 ```
 
 ## License
