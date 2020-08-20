@@ -70,7 +70,7 @@ const libp2p = await createLibP2P()
 const room = createRoom(libp2p, topic) // Creates room with specific topic
 
 // Methods
-room.leave() // Leave the room, stop libp2p
+room.leave() // Leave the room
 async room.broadcast(message: string | buffer) // Send message to the room
 
 // Getters
@@ -89,7 +89,7 @@ room.on('error', (error: Error) => {})
 const directChat = DirectChat.getDirectChat(libp2p)
 
 // Methods
-directChat.sendTo()
+directChat.sendTo('somePeerId', {level: 'info', msg: 'hello world with custom object'})
 
 // Listeners
 directChat.on('message', (message: MessageDirect) => {})
