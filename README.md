@@ -35,10 +35,10 @@ This project extends the [ipfs-pubsub-room](https://github.com/ipfs-shipyard/ipf
 
 Example of usage:
 ```ts
-import { Room, DirectChat, createLibP2P, Message, MessageDirect } from '@rsksmart/rif-communications-pubsub'
+import { Room, DirectChat, createLibP2P, Message, DirectMessage } from '@rsksmart/rif-communications-pubsub'
 
 const libp2p = await createLibP2P()
-const room = createRoom(libp2p, 'my_topic')
+const room = new Room(libp2p, 'my_topic')
 
 room.on('peer:joined', (peer: string) => {
   console.log('Peer joined the room ', peer)
@@ -56,9 +56,9 @@ room.on('unsubscribed', () => {
   console.log('Unsubscribed from the room room')
 })
 
-const directChat = DirectChat.getDirectChat(libp2p)
+const directChat = new DirectChat(libp2p)
 
-directChat.on('message', ({from, to, data}: MessageDirect) => {
+directChat.on('message', ({from, to, data}: DirectMessage) => {
   console.log('New direct message from ', peer, ' to ', to, ' content ', data)
 })
 ```

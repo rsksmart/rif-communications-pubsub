@@ -22,7 +22,3 @@ export interface Options {
   pollInterval?: number
   ignoreSelfMessages?: boolean
 }
-
-export interface Dictionary<T> {
-  [key: string]: T
-}
