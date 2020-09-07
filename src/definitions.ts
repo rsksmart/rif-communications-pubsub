@@ -3,7 +3,7 @@ export type JsonObject = { [member: string]: JsonSerializable }
 export type JsonArray = JsonSerializable[]
 export type JsonSerializable = JsonPrimitive | JsonObject | JsonArray
 
-export interface MessageDirect<T = JsonSerializable> {
+export interface DirectMessage<T = JsonSerializable> {
   from: string
   to: string
   data: T
