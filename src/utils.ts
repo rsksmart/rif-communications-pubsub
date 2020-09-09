@@ -1,13 +1,6 @@
 import Libp2p from 'libp2p'
 import PeerId from 'peer-id'
 
-export const toBuffer = (message: string|Buffer): Buffer => {
-  if (Buffer.isBuffer(message)) {
-    return message
-  }
-  return Buffer.from(message)
-}
-
 export const createLibP2P = async (config: any): Promise<Libp2p> => {
   let libp2p
 

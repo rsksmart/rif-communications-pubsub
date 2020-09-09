@@ -14,7 +14,7 @@ declare module 'libp2p' {
     }
   }
 
-  type MessageHandler = (msg: { from: string, data: Buffer, seqno: Buffer, topicIDs: Array<string>, signature: Buffer, key: Buffer }) => void
+  type MessageHandler = (msg: { from: string, data: Uint8Array, seqno: Buffer, topicIDs: Array<string>, signature: Buffer, key: Buffer }) => void
 
   export default class Libp2p {
     peerId: any
@@ -42,14 +42,17 @@ declare module 'libp2p' {
     dialProtocol (peerInfo: any, PROTOCOL: string): Promise<{ stream: (data: Buffer) => Promise<void>, protocol: any }>
 
     pubsub: {
-      subscribe (topic: string, onMessage: MessageHandler): void
-      unsubscribe (topic: string, onMessage: MessageHandler): void
-      publish (topic: string, message: Buffer): Promise<void>
+      on (topic: string, onMessage: MessageHandler): void
+      removeListener (topic: string, onMessage: MessageHandler): void
+      subscribe (topic: string): void
+      unsubscribe (topic: string): void
+      publish (topic: string, message: Uint8Array): Promise<void>
       getSubscribers (topic: string): Promise<[]>
-      _pubsub: {
-        _options: {
-          enabled: boolean
-        }
+    }
+
+    _config: {
+      pubsub: {
+        enabled: boolean
       }
     }
 
