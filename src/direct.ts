@@ -3,11 +3,11 @@ import PeerId from 'peer-id'
 import pipe from 'it-pipe'
 import Emittery from 'emittery'
 
-import type { JsonSerializable, Dictionary, MessageDirect } from './definitions'
+import type { JsonSerializable, Dictionary, DirectMessage } from './definitions'
 
 export const PROTOCOL = 'rif-communications-pubsub/v0.1.0'
 
-export default class DirectChat extends Emittery.Typed<{ 'message': MessageDirect, 'error': Error }> {
+export default class DirectChat extends Emittery.Typed<{ 'message': DirectMessage, 'error': Error }> {
   // Dictionary of libp2p listeners
   private static protocols: Dictionary<DirectChat> = {}
   private libp2p: Libp2p
@@ -54,7 +54,7 @@ export default class DirectChat extends Emittery.Typed<{ 'message': MessageDirec
           try {
             const parsedData = JSON.parse(Buffer.from(msg.data, 'hex').toString()) as JsonSerializable
 
-            const m: MessageDirect = {
+            const m: DirectMessage = {
               from: msg.from,
               to: msg.to,
               data: parsedData
