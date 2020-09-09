@@ -1,8 +1,9 @@
 import Emittery from 'emittery'
 import diff from 'hyperdiff'
 import type Libp2p from 'libp2p'
+import uint8ArrayFromString from 'uint8arrays/from-string'
+import uint8ArrayToString from 'uint8arrays/to-string'
 
-import { toBuffer } from './utils'
 import type { JsonSerializable, Message, Options } from './definitions'
 
 export const DEFAULT_OPTIONS: Options = {
@@ -29,7 +30,7 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
     this.onMessage = this.onMessage.bind(this)
     this.pollPeers = this.pollPeers.bind(this)
 
-    if (!this.libp2p.pubsub || !this.libp2p.pubsub._pubsub._options.enabled) {
+    if (!this.libp2p.pubsub || !this.libp2p._config.pubsub.enabled) {
       throw new Error('pubsub has not been configured')
     }
 
@@ -38,7 +39,8 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
       options.pollInterval!
     )
 
-    this.libp2p.pubsub.subscribe(this.topic, this.onMessage)
+    this.libp2p.pubsub.on(this.topic, this.onMessage)
+    this.libp2p.pubsub.subscribe(this.topic)
   }
 
   /**
@@ -60,13 +62,13 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
     }
   }
 
-  private onMessage (message: Message<Buffer>): void {
+  private onMessage (message: Message<Uint8Array>): void {
     if (this.ignoreSelfMessages && message.from === this.peerId) {
       return
     }
 
     try {
-      const parsedData = JSON.parse(message.data!.toString()) as JsonSerializable
+      const parsedData = JSON.parse(uint8ArrayToString(message.data)) as JsonSerializable
       const newMessage: Message = { ...message, data: parsedData }
       this.emit('message', newMessage)
     } catch (e) {
@@ -92,7 +94,8 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
 
   public leave (): void {
     clearInterval(this.interval)
-    this.libp2p.pubsub.unsubscribe(this.topic, this.onMessage)
+    this.libp2p.pubsub.unsubscribe(this.topic)
+    this.libp2p.pubsub.removeListener(this.topic, this.onMessage)
     this.emit('unsubscribed')
   }
 
@@ -100,7 +103,7 @@ export default class PubSubRoom extends Emittery.Typed<{ 'peer:joined': string, 
    * Broadcast message to the topic
    */
   public async broadcast (message: JsonSerializable): Promise<void> {
-    const msg = toBuffer(JSON.stringify(message))
+    const msg = uint8ArrayFromString(JSON.stringify(message))
     await this.libp2p.pubsub.publish(this.topic, msg)
   }
 }

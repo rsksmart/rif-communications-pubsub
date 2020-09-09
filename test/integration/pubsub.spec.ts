@@ -45,7 +45,9 @@ describe('PubSub messaging', function () {
   let consumer2: Room
   let consumer3: Room
 
-  before(async () => {
+  before(async function () {
+    this.timeout(10000)
+
     l1 = await getLibp2p(libp2pconfig)
     l2 = await getLibp2p(libp2pconfig)
     l3 = await getLibp2p(libp2pconfig)
