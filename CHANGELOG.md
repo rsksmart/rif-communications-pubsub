@@ -1,3 +1,18 @@
+<a name="0.1.0-dev.9"></a>
+# [0.1.0-dev.9](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.8...v0.1.0-dev.9) (2020-09-22)
+
+
+### Chores
+
+* export directmessage type ([#40](https://github.com/rsksmart/rif-communications-pubsub/issues/40)) ([e166a51](https://github.com/rsksmart/rif-communications-pubsub/commit/e166a51))
+
+
+### BREAKING CHANGES
+
+* Rename of MessageDirect interface to DirectMessage
+
+
+
 <a name="0.1.0-dev.8"></a>
 # [0.1.0-dev.8](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.7...v0.1.0-dev.8) (2020-08-25)
 
