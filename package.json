@@ -29,7 +29,7 @@
     "types-check": "tasegir types-check",
     "exec": "tasegir run",
     "lint": "tasegir lint",
-    "release": "tasegir release",
+    "release": "tasegir release --no-docs --target=node",
     "build": "tasegir build",
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "tasegir test --target node --files ./test/unit/*.spec.ts",
