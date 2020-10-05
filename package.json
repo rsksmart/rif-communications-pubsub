@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "emittery": "^0.7.1",
-    "hyperdiff": "^2.0.6",
+    "hyperdiff": "^2.0.7",
     "it-pipe": "^1.1.0",
     "libp2p": "^0.29.0",
     "libp2p-bootstrap": "^0.12.1",
@@ -49,10 +49,10 @@
     "libp2p-noise": "^2.0.1",
     "libp2p-secio": "^0.13.1",
     "libp2p-tcp": "^0.15.1",
-    "libp2p-webrtc-star": "^0.20.0",
+    "libp2p-webrtc-star": "^0.20.1",
     "libp2p-websockets": "^0.14.0",
     "lodash": "^4.17.20",
-    "peer-id": "^0.14.1",
+    "peer-id": "^0.14.2",
     "uint8arrays": "^1.1.0"
   },
   "devDependencies": {
