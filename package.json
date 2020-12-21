@@ -50,7 +50,7 @@
     "libp2p-secio": "^0.13.1",
     "libp2p-tcp": "^0.15.1",
     "libp2p-webrtc-star": "^0.20.1",
-    "libp2p-websockets": "^0.14.0",
+    "libp2p-websockets": "^0.15.0",
     "lodash": "^4.17.20",
     "peer-id": "^0.14.2",
     "uint8arrays": "^1.1.0"
