@@ -1,6 +1,6 @@
 {
   "name": "@rsksmart/rif-communications-pubsub",
-  "version": "0.1.0-dev.10",
+  "version": "0.1.0-dev.11",
   "description": "PubSub module",
   "keywords": [
     "RIF",
@@ -37,28 +37,28 @@
     "tasegir:link": "ln -s ./node_modules/tasegir/src/config/tsconfig.json ./tsconfig.json && ln -s ./node_modules/tasegir/src/config/eslintrc.js ./.eslintrc.js"
   },
   "dependencies": {
-    "emittery": "^0.7.1",
-    "hyperdiff": "^2.0.7",
+    "emittery": "^0.7.2",
+    "hyperdiff": "^2.0.8",
     "it-pipe": "^1.1.0",
-    "libp2p": "^0.29.0",
+    "libp2p": "^0.30.0",
     "libp2p-bootstrap": "^0.12.1",
-    "libp2p-gossipsub": "^0.7.0",
-    "libp2p-kad-dht": "^0.20.1",
+    "libp2p-gossipsub": "^0.8.0",
+    "libp2p-kad-dht": "^0.20.4",
     "libp2p-mdns": "^0.15.0",
-    "libp2p-mplex": "^0.10.0",
+    "libp2p-mplex": "^0.10.1",
     "libp2p-noise": "^2.0.1",
     "libp2p-secio": "^0.13.1",
     "libp2p-tcp": "^0.15.1",
-    "libp2p-webrtc-star": "^0.20.1",
-    "libp2p-websockets": "^0.14.0",
+    "libp2p-webrtc-star": "^0.20.5",
+    "libp2p-websockets": "^0.15.0",
     "lodash": "^4.17.20",
     "peer-id": "^0.14.2",
-    "uint8arrays": "^1.1.0"
+    "uint8arrays": "^2.0.5"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.12",
-    "@types/lodash": "^4.14.161",
-    "@types/mocha": "^8.0.3",
+    "@types/chai": "^4.2.14",
+    "@types/lodash": "^4.14.165",
+    "@types/mocha": "^8.2.0",
     "chai": "^4.2.0",
     "tasegir": "^1.8.0"
   },
