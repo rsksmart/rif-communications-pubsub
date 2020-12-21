@@ -1,3 +1,8 @@
+<a name="0.1.0-dev.11"></a>
+# [0.1.0-dev.11](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.10...v0.1.0-dev.11) (2020-12-21)
+
+
+
 <a name="0.1.0-dev.10"></a>
 # [0.1.0-dev.10](https://github.com/rsksmart/rif-communications-pubsub/compare/v0.1.0-dev.9...v0.1.0-dev.10) (2020-10-05)
 
