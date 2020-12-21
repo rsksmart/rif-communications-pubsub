@@ -94,7 +94,7 @@ describe('Direct protocol messaging', function () {
 
     const p = PeerId.createFromCID(node2a.peerId)
     const peerInfo = l1.peerStore.get(p)
-    const { stream } = await l1.dialProtocol(peerInfo.id, PROTOCOL)
+    const { stream } = await l1.dialProtocol(peerInfo!.id, PROTOCOL)
 
     const msg = {
       from: l1.peerId.toB58String(),

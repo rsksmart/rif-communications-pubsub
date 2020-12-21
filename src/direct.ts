@@ -76,6 +76,11 @@ export default class DirectChat extends Emittery.Typed<{ 'message': DirectMessag
   public async sendTo (peer: string, message: JsonSerializable): Promise<void> {
     const p = PeerId.createFromCID(peer)
     const peerInfo = this.libp2p.peerStore.get(p)
+
+    if (!peerInfo) {
+      throw new Error(`Peer ${peer} not found in Peer Store!`)
+    }
+
     const { stream } = await this.libp2p.dialProtocol(peerInfo.id, PROTOCOL)
 
     const msg = {
