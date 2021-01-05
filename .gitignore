@@ -113,9 +113,9 @@ web_modules/
 .pnp.*
 
 # Build folder
-lib
-dist
-types
+#lib
+#dist
+#types
 
 # Tasegir files
 tsconfig.json

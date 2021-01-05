@@ -24,7 +24,6 @@
   "main": "lib/index.js",
   "repository": "https://github.com/rsksmart/rif-communications-pubsub",
   "scripts": {
-    "prepack": "npm install tasegir && tasegir compile --declarations",
     "compile": "tasegir compile",
     "compile:watch": "tasegir compile -- --watch",
     "types-check": "tasegir types-check",
